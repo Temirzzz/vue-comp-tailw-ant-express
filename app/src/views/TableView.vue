@@ -13,7 +13,7 @@ import { useFetch } from '@/composibles/useFetch'
 
 const { fetching, data, isLoading } = useFetch()
 
-onMounted(() => fetching(`https://jsonplaceholder.typicode.com/users`, 0))
+onMounted(() => fetching(`http://localhost:3500?page=${1}`))
 
 const tbody = ref(data)
 

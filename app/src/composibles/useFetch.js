@@ -8,20 +8,22 @@ export const useFetch = () => {
   let totalPages = ref(0)
   const isLoading = ref(false)
 
-  const fetching = async (url, pageNumber) => {
+  const fetching = async (url) => {
     try {
       isLoading.value = true
-      const response = await axios(url, {
-        params: {
-          _page: pageNumber,
-          _limit: limit
-        }
-      })
+      const response = await axios(url)
 
-      console.log(response);
+      data.value = await response.data.data
+      totalPages.value = await response.data.totalPages
+      page.value = await response.data.page
+      limit.value = await response.data.limit
 
-      totalPages.value = Math.ceil(response.headers["x-total-count"] / limit.value)
-      data.value = response.data
+
+      console.log('data ', data.value);
+      console.log('page ', page.value);
+      console.log('totalPages ', totalPages.value);
+      console.log('limit ', limit.value);
+
 
     } catch (error) {
       console.log(error);
@@ -34,27 +36,28 @@ export const useFetch = () => {
   const fetchMorePages = async (url) => {
     try {
       page.value += 1
-      const response = await axios(url, {
-        params: {
-          _page: page,
-          _limit: limit
-        }
-      })
-      totalPages.value = Math.ceil(response.headers["x-total-count"] / limit.value)
+      const response = await axios(url)
 
-      console.log('fetchMorePages ', totalPages.value);
-      data.value = [...data.value, ...response.data]
-
+      totalPages.value = await response.data.totalPages
+      data.value = [...data.value, ...response.data.data]
     } catch (error) {
       console.log(error);
     }
   }
+
+  const addNewData = async (url, title) => {
+    console.log('addNewData ', title);
+    const response = await axios.post(url, title)
+    return response
+  } 
 
   return {
     data,
     isLoading,
     fetching,
     fetchMorePages,
-    totalPages
+    totalPages,
+    page,
+    addNewData
   }
 }

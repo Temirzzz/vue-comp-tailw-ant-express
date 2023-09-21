@@ -29,15 +29,14 @@ import TodoForm from '@/components/TodoForm.vue';
 import { useFetch } from '@/composibles/useFetch';
 import { useSearch } from '@/composibles/useSearch'
 import PaginationView from '@/components/PaginationView'
+import { BASE_URL } from '@/utils/constant'
 
-const { data, isLoading, fetching, totalPages } = useFetch()
+const { data, isLoading, fetching, totalPages, page, addNewData } = useFetch()
 const isForm = ref(false)
-let page = ref(1)
 const search = ref('')
-
 const { searchedData } = useSearch(search, data)
 
-onMounted(() => fetching(`http://localhost:3500/`, 1))
+onMounted(() => fetching(`${BASE_URL}:3500/todos?page=${page.value}`))
 
 const showForm = () => {
   isForm.value = true
@@ -52,7 +51,7 @@ const removeTodo = (id) => {
 }
 
 const formHandler = (title) => {
-  data.value.push({ id: Date.now(), title: title, completed: false })
+  addNewData(`${BASE_URL}:3500/todos/add`, { title: title })
   isForm.value = false
 }
 
@@ -63,7 +62,7 @@ const doneHandler = (id) => {
 
 const switchPage = (pageNumber) => {
   page.value = pageNumber
-  fetching(`https://jsonplaceholder.typicode.com/todos`, pageNumber)
+  fetching(`${BASE_URL}:3500/todos?page=${pageNumber}`)
 }
 
 </script>

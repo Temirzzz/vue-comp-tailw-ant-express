@@ -1,9 +1,9 @@
 // import 'dotenv/config'
 import dotenv from 'dotenv';
 dotenv.config({ override: true });
-import mysql from 'mysql2'
+import mysql from 'mysql2/promise'
 
-export const connection = mysql.createConnection({
+export const connection = await mysql.createConnection({
   host: process.env.HOST,
   user: process.env.USER,
   password: process.env.PASWD,
