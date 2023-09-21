@@ -1,10 +1,9 @@
 ## General info
-Simple fullstack application with routes: Todo, Users
+Simple fullstack application with routes: Todo, Users.
 
 
 ## Technologies
-Vue, tailwindcss on frontend 
-Express js, mysql on backend
+Vue, tailwindcss on frontend. Express js, mysql on backend.
 
 
 ## Setup and launch

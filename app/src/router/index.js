@@ -1,7 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-// import TodosView from '@/views/TodosView'
 import HomeView from '@/views/HomeView'
-
 
 const routes = [
   {
@@ -12,7 +10,6 @@ const routes = [
   {
     path: '/todos',
     name: 'todos',
-    // component: TodosView
     component: () => import(/* webpackChunkName: "about" */ '../views/TodosView.vue')
   },
   {

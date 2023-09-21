@@ -3,7 +3,7 @@
     <span class="absolute top-5 right-5 cursor-pointer" @click="hideForm">&#10006;</span>
     <div class="flex justify-center h-20">
       <a-form class="flex flex-col" >
-        <a-input v-model:value.trim="title" type="text" placeholder="New todo" />
+        <a-input v-model:value="title" type="text" placeholder="New todo" />
         <a-button ghost class="mt-2 border border-current text-white" type="primary" danger @click="addTodo">Add</a-button>
       </a-form>
     </div>

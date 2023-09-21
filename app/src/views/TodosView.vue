@@ -31,12 +31,12 @@ import { useSearch } from '@/composibles/useSearch'
 import PaginationView from '@/components/PaginationView'
 import { BASE_URL } from '@/utils/constant'
 
-const { data, isLoading, fetching, totalPages, page, addNewData } = useFetch()
+const { data, isLoading, fetching, totalPages, page, addNewData, deleteTodos, updateTodos } = useFetch()
 const isForm = ref(false)
 const search = ref('')
 const { searchedData } = useSearch(search, data)
 
-onMounted(() => fetching(`${BASE_URL}:3500/todos?page=${page.value}`))
+onMounted(() => fetching(`${BASE_URL}:3500/todos?page=${ page.value }`))
 
 const showForm = () => {
   isForm.value = true
@@ -47,17 +47,20 @@ const hideForm = () => {
 }
 
 const removeTodo = (id) => {
-  return data.value = data.value.filter(todo => id !== todo.id)
+  deleteTodos(`${BASE_URL}:3500/todos/delete/${id}`)
+  // fetching(`${BASE_URL}:3500/todos?page=${ page.value }`)
 }
 
 const formHandler = (title) => {
   addNewData(`${BASE_URL}:3500/todos/add`, { title: title })
+  fetching(`${BASE_URL}:3500/todos?page=${ page.value }`)
   isForm.value = false
 }
 
 const doneHandler = (id) => {
   const done = data.value.find(todo => todo.id == id)
-  return done.completed = !done.completed
+  const completed = done.completed = !done.completed
+  updateTodos(`${BASE_URL}:3500/todos/update/${id}`, { completed: completed })
 }
 
 const switchPage = (pageNumber) => {

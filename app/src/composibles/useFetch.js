@@ -13,6 +13,7 @@ export const useFetch = () => {
       isLoading.value = true
       const response = await axios(url)
 
+      if(!response.data.data) return
       data.value = await response.data.data
       totalPages.value = await response.data.totalPages
       page.value = await response.data.page
@@ -46,10 +47,20 @@ export const useFetch = () => {
   }
 
   const addNewData = async (url, title) => {
-    console.log('addNewData ', title);
     const response = await axios.post(url, title)
     return response
   } 
+
+  const deleteTodos = async (url) => {
+    const response = await axios.delete(url)
+    return response
+  }
+
+  const updateTodos = async (url,  completed) => {
+    console.log('updateTodos ', completed);
+    const response = await axios.put(url, completed)
+    return response
+  }
 
   return {
     data,
@@ -58,6 +69,8 @@ export const useFetch = () => {
     fetchMorePages,
     totalPages,
     page,
-    addNewData
+    addNewData,
+    deleteTodos,
+    updateTodos,
   }
 }

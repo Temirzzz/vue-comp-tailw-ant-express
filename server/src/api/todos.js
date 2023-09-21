@@ -1,4 +1,4 @@
-import { Router } from 'express'
+import { Router, query } from 'express'
 const todosRouter = Router()
 import { connection } from '../config/config.js'
 
@@ -16,7 +16,7 @@ todosRouter.get('/todos', async (req, res) => {
     console.log(totalPagesData);
     console.log(totalPages);
 
-    res.status(200).json({
+    return res.status(200).json({
       data: data,
       page: +page,
       limit: +limit,
@@ -31,8 +31,31 @@ todosRouter.get('/todos', async (req, res) => {
 todosRouter.post('/todos/add', async (req, res) => {
   try {
     const title = await req.body.title
-    await connection.query(`INSERT INTO todos (title, completed) VALUES ('${title}', ${false})`)
-    return res.json({response: "success"})
+    await connection.query(`INSERT INTO todos (title, completed) VALUES (?, ?)`, [title, false])
+    return res.json({ response: "success" })
+  } catch (error) {
+    console.log(error);
+  }
+})
+
+todosRouter.delete('/todos/delete/:id', async (req, res) => {
+  try {
+    const id = await req.params.id
+    console.log('delete ', id);
+    await connection.query(`DELETE FROM todos WHERE id= ?`, [id])
+    return res.json({ response: "success" })
+  } catch (error) {
+    console.log(error);
+  }
+})
+
+todosRouter.put('/todos/update/:id', async (req, res) => {
+  try {
+    const id = await req.params.id
+    const completed = await req.body.completed
+    console.log('update ', id, completed);
+    await connection.query(`UPDATE todos SET completed = ?  WHERE id= ?`, [completed, id])
+    return res.json({ response: "success" })
   } catch (error) {
     console.log(error);
   }
