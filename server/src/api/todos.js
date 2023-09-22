@@ -7,14 +7,10 @@ todosRouter.get('/todos', async (req, res) => {
     const limit = 10
     const { page } = req.query
     const offset = (page - 1 ) * limit
+    if(offset === -10) return
     const [data] = await connection.query(`SELECT * FROM todos limit ? offset ?`, [+limit, +offset])
     const [totalPagesData] = await connection.query(`SELECT count(*) as count FROM todos`)
     const totalPages = Math.ceil(+totalPagesData[0]?.count / limit)
-
-    console.log(page, limit);
-    console.log(data);
-    console.log(totalPagesData);
-    console.log(totalPages);
 
     return res.status(200).json({
       data: data,
@@ -40,8 +36,7 @@ todosRouter.post('/todos/add', async (req, res) => {
 
 todosRouter.delete('/todos/delete/:id', async (req, res) => {
   try {
-    const id = await req.params.id
-    console.log('delete ', id);
+    const id = req.params.id
     await connection.query(`DELETE FROM todos WHERE id= ?`, [id])
     return res.json({ response: "success" })
   } catch (error) {
@@ -51,9 +46,8 @@ todosRouter.delete('/todos/delete/:id', async (req, res) => {
 
 todosRouter.put('/todos/update/:id', async (req, res) => {
   try {
-    const id = await req.params.id
+    const id = req.params.id
     const completed = await req.body.completed
-    console.log('update ', id, completed);
     await connection.query(`UPDATE todos SET completed = ?  WHERE id= ?`, [completed, id])
     return res.json({ response: "success" })
   } catch (error) {

@@ -16,6 +16,7 @@
     </div>
     <div class="container mr-auto ml-auto flex flex-col items-center">
       <a-spin v-if="isLoading" />
+      <div v-else-if="!todos.length">No todo</div>
       <todos-view v-else @done="doneHandler" @remove="removeTodo" :todos="searchedData" />
     </div>
     <pagination-view class="mb-10 mt-10" @changePage="switchPage" :totalPages="totalPages" :page="page" />
@@ -74,8 +75,6 @@ const removeTodo = (id) => {
       fetching(`${BASE_URL}:3500/todos?page=${ page.value }`)
     }
   })
-  console.log('todos', todos.value.length);
-  console.log('page ', page.value);
 }
 
 const doneHandler = (id) => {

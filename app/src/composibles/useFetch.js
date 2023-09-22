@@ -13,7 +13,7 @@ export const useFetch = () => {
       isLoading.value = true
       const response = await axios(url)
 
-      if(!response.data.data) return
+      if(!response.data.data || page.value === 0) return
       todos.value = await response.data.data
       totalPages.value = await response.data.totalPages
       page.value = await response.data.page
