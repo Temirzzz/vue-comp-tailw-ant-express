@@ -2,7 +2,7 @@ import axios from 'axios'
 import { ref } from 'vue'
 
 export const useFetch = () => {
-  let data = ref([])
+  let todos = ref([])
   const page = ref(1)
   const limit = ref(10)
   let totalPages = ref(0)
@@ -14,17 +14,10 @@ export const useFetch = () => {
       const response = await axios(url)
 
       if(!response.data.data) return
-      data.value = await response.data.data
+      todos.value = await response.data.data
       totalPages.value = await response.data.totalPages
       page.value = await response.data.page
       limit.value = await response.data.limit
-
-
-      console.log('data ', data.value);
-      console.log('page ', page.value);
-      console.log('totalPages ', totalPages.value);
-      console.log('limit ', limit.value);
-
 
     } catch (error) {
       console.log(error);
@@ -40,13 +33,13 @@ export const useFetch = () => {
       const response = await axios(url)
 
       totalPages.value = await response.data.totalPages
-      data.value = [...data.value, ...response.data.data]
+      return todos.value = [...todos.value, ...response.data.data]
     } catch (error) {
       console.log(error);
     }
   }
 
-  const addNewData = async (url, title) => {
+  const addTodods = async (url, title) => {
     const response = await axios.post(url, title)
     return response
   } 
@@ -57,19 +50,18 @@ export const useFetch = () => {
   }
 
   const updateTodos = async (url,  completed) => {
-    console.log('updateTodos ', completed);
     const response = await axios.put(url, completed)
     return response
   }
 
   return {
-    data,
+    todos,
     isLoading,
     fetching,
     fetchMorePages,
     totalPages,
     page,
-    addNewData,
+    addTodods,
     deleteTodos,
     updateTodos,
   }

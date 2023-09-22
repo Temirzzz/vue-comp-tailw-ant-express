@@ -1,5 +1,5 @@
 ## General info
-Simple fullstack application with routes: Todo, Users.
+Simple fullstack application with routes: Main ,Todos.
 
 
 ## Technologies

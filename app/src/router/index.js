@@ -12,11 +12,6 @@ const routes = [
     name: 'todos',
     component: () => import(/* webpackChunkName: "about" */ '../views/TodosView.vue')
   },
-  {
-    path: '/table',
-    name: 'table',
-    component: () => import(/* webpackChunkName: "about" */ '../views/TableView.vue')
-  }
 ]
 
 const router = createRouter({

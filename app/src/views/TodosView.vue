@@ -12,7 +12,7 @@
       <a-input class="w-80" v-model:value="search" placeholder="Search" />
     </div>
     <div class="flex justify-center">
-      <todo-form ref="form_ref" v-if="isForm" @addTodo="formHandler" @hideForm="hideForm" />
+      <todos-form v-if="isForm" @addTodo="formHandler" @hideForm="hideForm" />
     </div>
     <div class="container mr-auto ml-auto flex flex-col items-center">
       <a-spin v-if="isLoading" />
@@ -23,42 +23,63 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import TodosView from '@/components/TodosView.vue';
-import TodoForm from '@/components/TodoForm.vue';
-import { useFetch } from '@/composibles/useFetch';
-import { useSearch } from '@/composibles/useSearch'
-import PaginationView from '@/components/PaginationView'
+import { onMounted, computed } from 'vue'
 import { BASE_URL } from '@/utils/constant'
+import todosStore from '@/store/todosModule'
+import TodosView from '@/components/TodosView.vue'
+import TodosForm from '@/components/TodosForm.vue'
+import PaginationView from '@/components/PaginationView'
+import { useFetch } from '@/composibles/useFetch'
+import { useSearch } from '@/composibles/useSearch'
 
-const { data, isLoading, fetching, totalPages, page, addNewData, deleteTodos, updateTodos } = useFetch()
-const isForm = ref(false)
-const search = ref('')
-const { searchedData } = useSearch(search, data)
+const { todos, isLoading, fetching, totalPages, page, addTodods, deleteTodos, updateTodos } = useFetch()
+
+const search = computed({
+  get() {
+    return todosStore.state.search
+  },
+  set(value) {
+    todosStore.mutations.SET_SEARCH(value)
+  }
+})
+
+const { searchedData } = useSearch(search, todos)
 
 onMounted(() => fetching(`${BASE_URL}:3500/todos?page=${ page.value }`))
 
+let isForm = computed(() => todosStore.state.isForm)
+
+
 const showForm = () => {
-  isForm.value = true
+  todosStore.mutations.OPEN_TODOS_FORM()
 }
 
 const hideForm = () => {
-  isForm.value = false
-}
-
-const removeTodo = (id) => {
-  deleteTodos(`${BASE_URL}:3500/todos/delete/${id}`)
-  // fetching(`${BASE_URL}:3500/todos?page=${ page.value }`)
+  todosStore.mutations.CLOSE_TODOS_FORM()
 }
 
 const formHandler = (title) => {
-  addNewData(`${BASE_URL}:3500/todos/add`, { title: title })
-  fetching(`${BASE_URL}:3500/todos?page=${ page.value }`)
-  isForm.value = false
+  addTodods(`${BASE_URL}:3500/todos/add`, { title: title }).then(() => {
+    fetching(`${BASE_URL}:3500/todos?page=${ page.value }`)
+  })
+  todosStore.mutations.CLOSE_TODOS_FORM()
+}
+
+const removeTodo = (id) => {
+  deleteTodos(`${BASE_URL}:3500/todos/delete/${id}`).then(() => {
+    if(todos.value.length === 1) {
+      fetching(`${BASE_URL}:3500/todos?page=${ page.value - 1 }`)
+    } 
+    else {
+      fetching(`${BASE_URL}:3500/todos?page=${ page.value }`)
+    }
+  })
+  console.log('todos', todos.value.length);
+  console.log('page ', page.value);
 }
 
 const doneHandler = (id) => {
-  const done = data.value.find(todo => todo.id == id)
+  const done = todos.value.find(todo => todo.id == id)
   const completed = done.completed = !done.completed
   updateTodos(`${BASE_URL}:3500/todos/update/${id}`, { completed: completed })
 }
@@ -67,5 +88,8 @@ const switchPage = (pageNumber) => {
   page.value = pageNumber
   fetching(`${BASE_URL}:3500/todos?page=${pageNumber}`)
 }
+
+
+
 
 </script>

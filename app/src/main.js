@@ -5,5 +5,12 @@ import './assets/style.css'
 import router from './router'
 import Antd from 'ant-design-vue'
 import 'ant-design-vue/dist/reset.css'
+import directives from '@/directives'
 
-createApp(App).use(Antd).use(router).use(store).mount('#app')
+const app = createApp(App)
+
+directives.forEach((directive) => {
+  app.directive(directive.name, directive);
+})
+
+app.use(Antd).use(router).use(store).mount('#app')
