@@ -19,7 +19,7 @@ class TodosController {
       });
   
     } catch (error) {
-      console.log(error);
+      res.status(500).json(error)
     }
   }
 
@@ -29,7 +29,7 @@ class TodosController {
       await connection.query(`INSERT INTO todos (title, completed) VALUES (?, ?)`, [title, false])
       return res.json({ response: "success" })
     } catch (error) {
-      console.log(error);
+      res.status(500).json(error)
     }
   }
 
@@ -39,7 +39,7 @@ class TodosController {
       await connection.query(`DELETE FROM todos WHERE id= ?`, [id])
       return res.json({ response: "success" })
     } catch (error) {
-      console.log(error);
+      res.status(500).json(error)
     }
   }
 
@@ -50,7 +50,7 @@ class TodosController {
       await connection.query(`UPDATE todos SET completed = ?  WHERE id= ?`, [completed, id])
       return res.json({ response: "success" })
     } catch (error) {
-      console.log(error);
+      res.status(500).json(error)
     }
   }
 }

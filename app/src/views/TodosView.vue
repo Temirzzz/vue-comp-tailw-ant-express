@@ -45,11 +45,9 @@ const search = computed({
 })
 
 const { searchedData } = useSearch(search, todos)
-
-onMounted(() => fetching(`${BASE_URL}:3500/todos?page=${ page.value }`))
-
 let isForm = computed(() => todosStore.state.isForm)
 
+onMounted(() => fetching(`${BASE_URL}:3500/todos?page=${ page.value }`))
 
 const showForm = () => {
   todosStore.mutations.OPEN_TODOS_FORM()

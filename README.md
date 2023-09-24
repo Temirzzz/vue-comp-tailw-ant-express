@@ -3,7 +3,7 @@ Simple fullstack application with routes: Main ,Todos.
 
 
 ## Technologies
-Vue, tailwindcss on frontend. Express js, mysql on backend.
+Vue, tailwindcss, ant design on frontend. Express js, mysql on backend.
 
 
 ## Setup and launch
