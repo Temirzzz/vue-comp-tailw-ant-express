@@ -70,6 +70,12 @@ const removeTodo = (id) => {
   deleteTodos(`${BASE_URL}:3500/todos/delete/${id}`).then(() => {
     if(todos.value.length === 1) {
       fetching(`${BASE_URL}:3500/todos?page=${ page.value - 1 }`)
+      if (page.value === 1) {
+        fetching(`${BASE_URL}:3500/todos?page=${ page.value }`)
+      }
+      else {
+        fetching(`${BASE_URL}:3500/todos?page=${ page.value - 1 }`)
+      }
     } 
     else {
       fetching(`${BASE_URL}:3500/todos?page=${ page.value }`)
@@ -87,8 +93,5 @@ const switchPage = (pageNumber) => {
   page.value = pageNumber
   fetching(`${BASE_URL}:3500/todos?page=${pageNumber}`)
 }
-
-
-
 
 </script>
