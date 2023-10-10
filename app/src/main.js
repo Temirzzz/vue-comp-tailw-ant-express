@@ -14,3 +14,5 @@ directives.forEach((directive) => {
 })
 
 app.use(Antd).use(router).use(store).mount('#app')
+
+

@@ -54,6 +54,13 @@ export const useFetch = () => {
     return response
   }
 
+  const getOneUser = async (url) => {
+    const response = await axios(url)
+    console.log(response);
+    return response
+  }
+
+
   return {
     todos,
     isLoading,
@@ -64,5 +71,6 @@ export const useFetch = () => {
     addTodods,
     deleteTodos,
     updateTodos,
+    getOneUser
   }
 }

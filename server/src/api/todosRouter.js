@@ -4,7 +4,7 @@ const todosRouter = Router()
 
 todosRouter.get('/', TodosController.load)
 todosRouter.post('/add', TodosController.create)
-todosRouter.delete('/delete/:id', TodosController.delete )
-todosRouter.put('/update/:id', TodosController.edit)
+todosRouter.delete('/delete/:id', TodosController.delete)
+todosRouter.put('/update/:id', TodosController.toggleDone)
 
 export default todosRouter

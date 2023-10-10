@@ -47,7 +47,7 @@ const search = computed({
 const { searchedData } = useSearch(search, todos)
 let isForm = computed(() => todosStore.state.isForm)
 
-onMounted(() => fetching(`${BASE_URL}:3500/todos?page=${ page.value }`))
+onMounted(() => fetching(`${BASE_URL}/todos?page=${ page.value }`))
 
 const showForm = () => {
   todosStore.mutations.OPEN_TODOS_FORM()
@@ -58,25 +58,25 @@ const hideForm = () => {
 }
 
 const formHandler = (title) => {
-  addTodods(`${BASE_URL}:3500/todos/add`, { title: title }).then(() => {
-    fetching(`${BASE_URL}:3500/todos?page=${ page.value }`)
+  addTodods(`${BASE_URL}/todos/add`, { title: title }).then(() => {
+    fetching(`${BASE_URL}/todos?page=${ page.value }`)
   })
   todosStore.mutations.CLOSE_TODOS_FORM()
 }
 
 const removeTodo = (id) => {
-  deleteTodos(`${BASE_URL}:3500/todos/delete/${id}`).then(() => {
+  deleteTodos(`${BASE_URL}/todos/delete/${id}`).then(() => {
     if(todos.value.length === 1) {
-      fetching(`${BASE_URL}:3500/todos?page=${ page.value - 1 }`)
+      fetching(`${BASE_URL}/todos?page=${ page.value - 1 }`)
       if (page.value === 1) {
-        fetching(`${BASE_URL}:3500/todos?page=${ page.value }`)
+        fetching(`${BASE_URL}/todos?page=${ page.value }`)
       }
       else {
-        fetching(`${BASE_URL}:3500/todos?page=${ page.value - 1 }`)
+        fetching(`${BASE_URL}/todos?page=${ page.value - 1 }`)
       }
     } 
     else {
-      fetching(`${BASE_URL}:3500/todos?page=${ page.value }`)
+      fetching(`${BASE_URL}/todos?page=${ page.value }`)
     }
   })
 }
@@ -84,12 +84,12 @@ const removeTodo = (id) => {
 const doneHandler = (id) => {
   const done = todos.value.find(todo => todo.id == id)
   const completed = done.completed = !done.completed
-  updateTodos(`${BASE_URL}:3500/todos/update/${id}`, { completed: completed })
+  updateTodos(`${BASE_URL}/todos/update/${id}`, { completed: completed })
 }
 
 const switchPage = (pageNumber) => {
   page.value = pageNumber
-  fetching(`${BASE_URL}:3500/todos?page=${pageNumber}`)
+  fetching(`${BASE_URL}/todos?page=${pageNumber}`)
 }
 
 </script>

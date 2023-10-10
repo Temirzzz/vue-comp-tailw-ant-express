@@ -10,6 +10,9 @@ import { ref } from 'vue'
 const navlinks = ref([
   { id: 1, name: 'Home', to: '/' },
   { id: 1, name: 'Todos', to: '/todos' },
+  { id: 1, name: 'Register', to: '/register' },
 ])
+
+
 </script>
 
